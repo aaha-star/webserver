@@ -19,10 +19,7 @@ def getProjectInfo():
         for a in repoInfo:
             info[repo].append(a['full_name'])
 
-    for repo in repos:
-        repo_url = 'https://api.github.com/repos/%s/branches' % repo
-        repoInfo = readURL('Repositories/branchInfo/%s' % (repo), repo_url)
-        repoInfo = repoInfo and json.loads(repoInfo)
+
 
     return info
 
