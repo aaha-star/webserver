@@ -122,14 +122,8 @@ class application(object):
 				L.append(chunk)
 			params = json.loads(b''.join(L))
 
-<<<<<<< HEAD
-	def __iter__(self):
-		try:
-			return self.handle_route(self.path, self.params, SimpleCookie(self.env.get('HTTP_COOKIE')), None)
-=======
 		try:
 			return self.handle_route(route, params, SimpleCookie(self.env.get('HTTP_COOKIE')), None)
->>>>>>> 0e7796a61d4391ba51e3a9e21d3cdcd64a0ba8a4
 		except Exception as e:
 			return self.print_trace(e)
 
@@ -170,22 +164,20 @@ class application(object):
 					if getattr(getattr(mod, k), '____isRoute__', False)}
 			except IOError:
 				return self.send_error(404, 'Route module "%s" not found' % moduleName)
+			except Exception as e:
+				return self.print_trace(e)
 
 		module = self.MODULES[moduleName]
 		if routeName not in module:
 			return self.send_error(404, 'Route "%s" not found' % routeName)
 		return module[routeName]
 
-<<<<<<< HEAD
-		t, cookie, result = route(cookies, **params)
-=======
 	def handle_route(self, route, params, cookies, set_cookie):
 		"""Common code for GET and POST commands to handle route and send json result."""
 		if route.____useCookies__:
 			t, cookie, result = route(cookies = cookies, **params)
 		else:
 			t, cookie, result = route(**params)
->>>>>>> 0e7796a61d4391ba51e3a9e21d3cdcd64a0ba8a4
 
 		cookie is not None and cookies.load(cookie)
 		if set_cookie:
@@ -264,11 +256,7 @@ class application(object):
 				headers.append(('Set-Cookie', value.OutputString()))
 		if not url.startswith('http'):
 			url = 'http://' + url
-<<<<<<< HEAD
-		headers.append(('Location', url if isinstance(url, str) else encodeUTF8(url)))
-=======
 		headers.append(('Location', url if isinstance(url, str) else url.encode('utf-8')))
->>>>>>> 0e7796a61d4391ba51e3a9e21d3cdcd64a0ba8a4
 		self.start_response('302 Found', headers)
 		return iter([''.encode()])
 
@@ -285,17 +273,13 @@ class application(object):
 
 	class TemplateOutput(object):
 		def __init__(self):
-			object.__setattr__(self, 'content', '')
+			self.content = ''
 
 		def __getitem__(self, content):
-<<<<<<< HEAD
 			self.content += str(content)
-=======
-			object.__setattr__(self, 'content', self.content + str(content))
->>>>>>> 0e7796a61d4391ba51e3a9e21d3cdcd64a0ba8a4
 
 		def __setattr__(self, key, value):
-			object.__setattr__(self, 'content', self.content + '<script type="text/javascript">var %s = %s;</script>' % (key, json.dumps(value) or "null"))
+			self.content += '<script type="text/javascript">var %s = %s;</script>' % (key, json.dumps(value) or "null")
 
 	def template(self, path, data):
 		path = os.path.join(config.TEMPLATE, path.lstrip('/'))
