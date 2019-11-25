@@ -5,24 +5,22 @@ import requests
 import os
 import json
 
-repos = ['cxsjclassroom/webserver',"octocat/Hello-World"]
-
+repos = ['ReactiveX/RxJava',"octocat/Hello-World"]
 
 def getProjectInfo():
     info = {}
     for repo in repos:
-        repo_url = 'https://api.github.com/repos/%s/forks' % repo  # 确定url
-        repoInfo = readURL('Repositories/forkInfo/%s' % (repo), repo_url)  # 访问url得到数据
+        repo_url = 'https://api.github.com/repos/%s' % repo  # 确定url
+        repoInfo = readURL('Repositories/reposInfo/%s' % (repo), repo_url)  # 访问url得到数据
         repoInfo = repoInfo and json.loads(repoInfo)  # 将数据类型转换
 
-        info[repo] = []
-        for a in repoInfo:
-            info[repo].append(a['full_name'])
+        info[repo] = {
+			"stargazers_count":repoInfo['stargazers_count'],
+			'watchers_count':repoInfo['watchers_count']
 
-    for repo in repos:
-        repo_url = 'https://api.github.com/repos/%s/branches' % repo
-        repoInfo = readURL('Repositories/branchInfo/%s' % (repo), repo_url)
-        repoInfo = repoInfo and json.loads(repoInfo)
+		}
+
+
 
     return info
 
