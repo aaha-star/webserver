@@ -9,10 +9,9 @@ import json
 from logic.Team04 import projectBasicInfo as p
 
 @route('/hello.py.html')
-def projectInfo(cookies):
+def projectInfo():
 	info = p.getProjectInfo()
+	import pprint
+	pprint.pprint(info)
 	#将info返回给页面
 	return response(projectInfo=info)
-
-
-
